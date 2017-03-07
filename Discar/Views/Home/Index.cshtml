@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<Brand>
+@foreach (var brand in @Model)
+{
+    <div>@brand.BrandName</div>
+}
+<div class="item-containers-container">
+    <div class="item-container">
+        <a asp-controller="Home" asp-action="Lol">
+            <img src="~/images/innova-flat-logo.png">
+        </a>
+    </div>
+    <div class="item-container">
+        <a asp-controller="Home" asp-action="Lol">
+            <img src="~/images/discmania-281x281.png">
+        </a>
+    </div>
+    <div class="item-container">
+        <a asp-controller="Home" asp-action="Lol">
+            <img src="~/images/discmania-281x281.png">
+        </a>
+    </div>
+    <div class="item-container">
+        <a asp-controller="Home" asp-action="Lol">
+            <img src="~/images/discmania-281x281.png">
+        </a>
+    </div>
+</div>
+
+
