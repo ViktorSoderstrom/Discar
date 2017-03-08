@@ -16,6 +16,7 @@ namespace Discar.Models
     public class Disc
     {
         public int DiscId { get; set; }
+        public string DiscName { get; set; }
         public string Plastic { get; set; }
 
         public float Speed { get; set; }

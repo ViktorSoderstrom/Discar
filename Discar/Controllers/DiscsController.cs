@@ -6,34 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Discar.Models;
-using Discar.ViewModels;
 
 namespace Discar.Controllers
 {
-    public class BrandsController : Controller
+    public class DiscsController : Controller
     {
         private readonly DiscContext _context;
 
-        public BrandsController(DiscContext context)
+        public DiscsController(DiscContext context)
         {
             _context = context;    
         }
 
-        // GET: Brands
-        public async Task<IActionResult> Index()
+        [HttpGet("[controller]/[action]/{discId}")]
+        public IActionResult Disc(int discId)
         {
-            return View(await _context.Brands.ToListAsync());
-        }
-
-        [HttpGet("[controller]/[action]/{brandId}")]
-        public IActionResult Brand(int brandId)
-        {
-            BrandVM model = new BrandVM(_context, brandId);
+            Disc model = _context.Discs.Where(d => d.DiscId == discId).First();
             return View(model);
         }
-            
+        // GET: Discs
+        public async Task<IActionResult> Index()
+        {
+            var discContext = _context.Discs.Include(d => d.Brand);
+            return View(await discContext.ToListAsync());
+        }
 
-        // GET: Brands/Details/5
+        // GET: Discs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,39 +39,42 @@ namespace Discar.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brands
-                .SingleOrDefaultAsync(m => m.BrandId == id);
-            if (brand == null)
+            var disc = await _context.Discs
+                .Include(d => d.Brand)
+                .SingleOrDefaultAsync(m => m.DiscId == id);
+            if (disc == null)
             {
                 return NotFound();
             }
 
-            return View(brand);
+            return View(disc);
         }
 
-        // GET: Brands/Create
+        // GET: Discs/Create
         public IActionResult Create()
         {
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId");
             return View();
         }
 
-        // POST: Brands/Create
+        // POST: Discs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BrandId,BrandName")] Brand brand)
+        public async Task<IActionResult> Create([Bind("DiscId,DiscName,Plastic,Speed,Glide,Stability,Fade,Price,Url,BrandId")] Disc disc)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(brand);
+                _context.Add(disc);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(brand);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", disc.BrandId);
+            return View(disc);
         }
 
-        // GET: Brands/Edit/5
+        // GET: Discs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,22 +82,23 @@ namespace Discar.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brands.SingleOrDefaultAsync(m => m.BrandId == id);
-            if (brand == null)
+            var disc = await _context.Discs.SingleOrDefaultAsync(m => m.DiscId == id);
+            if (disc == null)
             {
                 return NotFound();
             }
-            return View(brand);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", disc.BrandId);
+            return View(disc);
         }
 
-        // POST: Brands/Edit/5
+        // POST: Discs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandName")] Brand brand)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscId,DiscName,Plastic,Speed,Glide,Stability,Fade,Price,Url,BrandId")] Disc disc)
         {
-            if (id != brand.BrandId)
+            if (id != disc.DiscId)
             {
                 return NotFound();
             }
@@ -105,12 +107,12 @@ namespace Discar.Controllers
             {
                 try
                 {
-                    _context.Update(brand);
+                    _context.Update(disc);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrandExists(brand.BrandId))
+                    if (!DiscExists(disc.DiscId))
                     {
                         return NotFound();
                     }
@@ -121,10 +123,11 @@ namespace Discar.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(brand);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", disc.BrandId);
+            return View(disc);
         }
 
-        // GET: Brands/Delete/5
+        // GET: Discs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,30 +135,31 @@ namespace Discar.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brands
-                .SingleOrDefaultAsync(m => m.BrandId == id);
-            if (brand == null)
+            var disc = await _context.Discs
+                .Include(d => d.Brand)
+                .SingleOrDefaultAsync(m => m.DiscId == id);
+            if (disc == null)
             {
                 return NotFound();
             }
 
-            return View(brand);
+            return View(disc);
         }
 
-        // POST: Brands/Delete/5
+        // POST: Discs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var brand = await _context.Brands.SingleOrDefaultAsync(m => m.BrandId == id);
-            _context.Brands.Remove(brand);
+            var disc = await _context.Discs.SingleOrDefaultAsync(m => m.DiscId == id);
+            _context.Discs.Remove(disc);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool BrandExists(int id)
+        private bool DiscExists(int id)
         {
-            return _context.Brands.Any(e => e.BrandId == id);
+            return _context.Discs.Any(e => e.DiscId == id);
         }
     }
 }

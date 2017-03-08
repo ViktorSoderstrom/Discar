@@ -8,9 +8,10 @@ using Discar.Models;
 namespace Discar.Migrations
 {
     [DbContext(typeof(DiscContext))]
-    partial class DiscContextModelSnapshot : ModelSnapshot
+    [Migration("20170308075100_changedisc")]
+    partial class changedisc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

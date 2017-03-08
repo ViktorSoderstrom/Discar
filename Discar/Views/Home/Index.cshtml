@@ -2,31 +2,17 @@
     ViewData["Title"] = "Home Page";
 }
 @model IEnumerable<Brand>
-@foreach (var brand in @Model)
-{
-    <div>@brand.BrandName</div>
-}
 <div class="item-containers-container">
-    <div class="item-container">
-        <a asp-controller="Home" asp-action="Lol">
-            <img src="~/images/innova-flat-logo.png">
-        </a>
-    </div>
-    <div class="item-container">
-        <a asp-controller="Home" asp-action="Lol">
-            <img src="~/images/discmania-281x281.png">
-        </a>
-    </div>
-    <div class="item-container">
-        <a asp-controller="Home" asp-action="Lol">
-            <img src="~/images/discmania-281x281.png">
-        </a>
-    </div>
-    <div class="item-container">
-        <a asp-controller="Home" asp-action="Lol">
-            <img src="~/images/discmania-281x281.png">
-        </a>
-    </div>
+    @foreach (var brand in @Model)
+    {
+        <div class="item-container">
+            <a asp-controller="Brands" asp-action="Brand" asp-route-brandId="@brand.BrandId">
+                <img src="~/images/brands/@(brand.BrandName).png">
+            </a>
+        </div>
+    }
 </div>
+
+
 
 

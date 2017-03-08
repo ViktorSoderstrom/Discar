@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Discar.Models;
+using Discar.ViewModels;
 
 namespace Discar.Controllers
 {
     public class HomeController : Controller
     {
         public DiscContext Context { get; set; }
+        
         public HomeController(DiscContext context)
         {
             this.Context = context;
@@ -38,12 +40,6 @@ namespace Discar.Controllers
 
         public IActionResult Error()
         {
-            return View();
-        }
-
-        public IActionResult Lol()
-        {
-            ViewData["Lol"] = "Detta är ganska roligt!";
             return View();
         }
 

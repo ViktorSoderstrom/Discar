@@ -1,0 +1,32 @@
+﻿
+@model BrandVM
+
+@Model.BrandName
+<div class="item-containers-container">
+    @foreach (var disc in @Model.Discs)
+    {
+        <div class="item-container">
+            <a asp-controller="Discs" asp-action="Disc" asp-route-discId="@disc.DiscId">
+                <img src="~/images/discs/@Model.BrandName/@disc.Plastic/@(disc.DiscName).png">
+                <div class="stats">
+                    <div class="stat speed">
+                        <div>@Html.DisplayNameFor(speed => @disc.Speed)</div>
+                        <div>@disc.Speed</div>
+                    </div>
+                    <div class="stat speed">
+                        <div>@Html.DisplayNameFor(glide => @disc.Glide)</div>
+                        <div>@disc.Glide</div>
+                    </div>
+                    <div class="stat speed">
+                        <div>@Html.DisplayNameFor(stability => @disc.Stability)</div>
+                        <div>@disc.Stability</div>
+                    </div>
+                    <div class="stat speed">
+                        <div>@Html.DisplayNameFor(fade => @disc.Fade)</div>
+                        <div>@disc.Fade</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
